@@ -5,7 +5,7 @@ This module provides tools for listing, searching,
 and retrieving schemas for fal.ai models.
 """
 
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from fastmcp import FastMCP
 from .utils import public_request
 from .config import FAL_BASE_URL
@@ -14,7 +14,7 @@ def register_model_tools(mcp: FastMCP):
     """Register model-related tools with the MCP server."""
     
     @mcp.tool()
-    async def models(page: Optional[int] = None, total: Optional[int] = None) -> List[Dict[str, Any]]:
+    async def models(page: Optional[int] = None, total: Optional[int] = None) -> Any:
         """
         List available models on fal.ai. Ensure to use the total and page arguments. Avoid listing all the models at once.
         
@@ -23,7 +23,7 @@ def register_model_tools(mcp: FastMCP):
             total: The total number of models to retrieve per page
             
         Returns:
-            A list of models with their metadata
+            JSON payload from fal.ai models endpoint (paginated object)
         """
         url = f"{FAL_BASE_URL}/models"
         
@@ -41,7 +41,7 @@ def register_model_tools(mcp: FastMCP):
         return result
 
     @mcp.tool()
-    async def search(keywords: str) -> List[Dict[str, Any]]:
+    async def search(keywords: str) -> Any:
         """
         Search for models on fal.ai based on keywords.
         
@@ -49,7 +49,7 @@ def register_model_tools(mcp: FastMCP):
             keywords: The search terms to find models
             
         Returns:
-            A list of models matching the search criteria
+            JSON payload from fal.ai models search endpoint
         """
         if not isinstance(keywords, str):
             keywords = str(keywords)
